@@ -19,7 +19,6 @@ example: https://api-v3.mbta.com/predictions?include=schedule%2Cstop%2Calerts&fi
 
 '''
 
-
 # Set your API key here
 API_KEY = "67a6b552015743b1b19d9c5131901e3e"
 
