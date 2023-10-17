@@ -1,0 +1,13 @@
+[Unit]
+Description=LCD date|time|ip
+
+[Service]
+ExecStart=/usr/bin/python3 lcd.py
+WorkingDirectory=/home/jhammond
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=jhammond
+
+[Install]
+WantedBy=multi-user.target
