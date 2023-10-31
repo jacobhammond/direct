@@ -1,0 +1,143 @@
+<!-- FILEPATH: /c:/Users/jhammond/Documents/jhu_embedded_capstone/software/transit.html -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Transit Application</title>
+    </head>
+    <body>
+        <!-- Logo Image -->
+        <div style="display: flex; justify-content: center;">
+            <img src="logo.png" alt="Transit Logo" style="margin: 20px; width: 60%; max-width: 5000px;">
+        </div>
+<div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+    <!-- Destination Dropdown Menu -->
+    <div style="display: flex; justify-content: flex-start; margin: 15px; font-family: Arial; font-size: 1.25em;">
+        <label for="routes" style="width: 200px;">Destination:</label>
+        <select id="routes" style="font-size: 1em; width: 125px; text-align: left;">
+            <option value="harvard">Harvard</option>
+            <option value="central">Central</option>
+            <option value="inkblock">Ink Block</option>
+        </select>
+    </div>
+
+    <!-- Notification Volume Dropdown Menu -->
+    <div style="display: flex; justify-content: flex-start; margin: 15px; font-family: Arial; font-size: 1.25em;">
+        <label for="volume" style="width: 200px;">Alarm Volume:</label>
+        <select id="volume" style="font-size: 1em; width: 125px; text-align: left;">
+            <option value="silent">Silent</option>
+            <option value="quiet">Quiet</option>
+            <option value="loud">Loud</option>    
+        </select>
+    </div>
+</div>
+        <!-- Start Button Event Listener -->
+        <div style="display: flex; justify-content: center; margin: 10px;">
+        <button id="start-btn" onclick="fetch_eta(); set_volume();" style="font-size: 2em; padding: 8px 12px;">GO</button>
+        </div>
+
+        <!-- Real Time Information Box -->
+        <div id="info-box" style="display: flex; flex-direction: column; align-items: center;">
+            <body onload="fetch_eta();">
+                <!-- Total Time Display -->
+                <div style="display: flex; justify-content: space-between; font-family: Arial; font-size: 1.5em; margin: 20px">
+                    <div style="text-align: left; padding-right: 51px; font-weight: bold;">Trip Duration:</div>                    
+                    <div id="total-time"></div>
+                </div>
+
+                <!-- ETA Display -->
+                <div style="display: flex; justify-content: space-between; font-family: Arial; font-size: 1.5em;">
+                    <div style="text-align: left; padding-right: 100px; font-weight: bold;">ETA:</div>
+                    <div id="eta"></div>
+                </div>
+                <h3 class="departure-header" style="font-family: Arial; font-size: 2em; margin: 80px">DEPART IN</h3>  
+            </body>            
+        </div>
+
+        <!-- Departure Countdown Timer Display -->
+        <div id="countdown" style="font-size: 10em; text-align: center; margin: 5px; font-family: Arial;"></div>
+        <style>
+            @keyframes blink {
+                0% {opacity: 1;}
+                50% {opacity: 0;}
+                100% {opacity: 1;}
+            }
+            .blink {
+                animation: blink 1s infinite;
+            }
+        </style>
+        <script>
+            function startCountdown(departureTime) {
+                var countdown = document.getElementById("countdown");
+                // Update the countdown every second
+                var countdownInterval = setInterval(function() {
+                    var now = new Date().getTime();
+                    var distance = departureTime - now;
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    // Display the result in the element with id="countdown"
+                    countdown.innerHTML = minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+                    // Set color of countdown based on time remaining
+                    if(distance < 60000) {
+                        countdown.style.color = "red";
+                        countdown.classList.add("blink");
+                    } else if (distance < 120000) {
+                        countdown.style.color = "orange";
+                    } else if (distance < 180000) {
+                        countdown.style.color = "yellow";
+                    }
+                    else {
+                        countdown.style.color = "green";
+                    }
+                    // If the countdown is finished, play the alarm sound
+                    if (distance < 0) {
+                        clearInterval(countdownInterval);
+                        countdown.innerHTML = "00:00";
+                        var audio = document.getElementById("alarm");
+                        audio.play();
+                    }
+                }, 1000);
+            }
+
+            function fetch_eta() {
+                var button = document.getElementById("start-btn");
+                if (button.innerHTML === "GO") {
+                    button.innerHTML = "Reload";
+                    // Get selected route from dropdown menu
+                    const selectedRoute = document.getElementById("routes").value;
+                    // Assuming departureTime is the time in milliseconds until departure
+                    //TODO: query eta algorithm her for transit time, ETA, and departure time
+                    //var transitTime = getTransitTime(selectedRoute);
+                    var transitTime = 60000*45;
+                    var transitTimeInMinutes = Math.floor(transitTime / 60000);
+                    var transitTimeInSeconds = Math.floor((transitTime % 60000) / 1000);
+                    document.getElementById("total-time").innerHTML += (transitTimeInMinutes.toString().padStart(2, '0') + ":" + transitTimeInSeconds.toString().padStart(2, '0'));                    //var eta = getETA(selectedRoute);
+                    var eta = new Date().getTime() + transitTime;
+                    document.getElementById("eta").innerHTML += new Date(eta).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});                    
+                    //var departureTime = getDepartureTime(selectedRoute);
+                    var departureTime = new Date().getTime() + 360000;
+                    startCountdown(departureTime);
+                } else {
+                    button.innerHTML = "GO";
+                }
+            }
+        </script>
+
+        <!--Set Notification Volume-->
+        <audio id="alarm" src="alarm.mp3"></audio>
+        <script>
+            function set_volume() {
+                var select = document.getElementById("volume");
+                var audio = document.getElementById("alarm");
+                var selectedVolume = select.options[select.selectedIndex].value;
+                if (selectedVolume === "silent") {
+                    audio.volume = 0.0; // Sets volume to 0%
+                } else if (selectedVolume === "quiet") {
+                    audio.volume = 0.5; // Sets volume to 50%
+                } else if (selectedVolume === "loud") {
+                    audio.volume = 1.0; // Sets volume to 100%
+                }
+            }
+        </script>
+    </body>
+</html>
