@@ -106,7 +106,9 @@
                     // Get selected route from dropdown menu
                     const selectedRoute = document.getElementById("routes").value;
                     // Assuming departureTime is the time in milliseconds until departure
-                    //TODO: query eta algorithm her for transit time, ETA, and departure time
+                    //query eta algorithm her for transit time, ETA, and departure time
+                    //<form action="/cgi-bin/eta.py" method="post">
+                    //</form>
                     //var transitTime = getTransitTime(selectedRoute);
                     var transitTime = 60000*45;
                     var transitTimeInMinutes = Math.floor(transitTime / 60000);
