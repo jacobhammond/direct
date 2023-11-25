@@ -8,6 +8,7 @@ FAWCETT_ID = "2152"
 HARVARD_ID = "place-harsq"
 DTX_ID = "place-dwnxg"
 TMPL_ID = "49001"
+BROADWAY_ID = "place-brdwy"
 
 
 
@@ -26,11 +27,14 @@ def print_route_steps(route):
     for leg in route:
         print(f"- {leg['mode']} to {leg['destination']}")
 
-
 def get_vehicle_departure(STOP_ID, line, direction, overlap_time):
     # Make a request to the MBTA API to get the status of arrival times at the stop
+    headers = {
+        "x-api-key": API_KEY
+    }
     response = requests.get(
-        f"https://api-v3.mbta.com/predictions?filter[stop]={STOP_ID}"
+        f"https://api-v3.mbta.com/predictions?filter[stop]={STOP_ID}",
+        headers=headers
     )
     upcoming = []
     # Check the response status code
@@ -227,38 +231,40 @@ route_6 = {
 }
 
 if __name__ == "__main__":
-    alewife_train = get_vehicle_departure(ALEWIFE_ID, "Red", direction=0, overlap_time=home_to_alewife["duration"].seconds/60)
+
+    #alewife_train = get_vehicle_departure(ALEWIFE_ID, "Red", direction=0, overlap_time=home_to_alewife["duration"].seconds/60)
     bus74 = get_vehicle_departure(FAWCETT_ID, "74", direction=1, overlap_time=5)
     bus78 = get_vehicle_departure(FAWCETT_ID, "78", direction=1, overlap_time=5)
-    harvard_train = get_vehicle_departure(HARVARD_ID, "Red", direction=0, overlap_time=concord_opp_fawcett_to_harvard["duration"].seconds/60)
-    busSL5 = get_vehicle_departure(TMPL_ID, "749", direction=0, overlap_time=20)
-    orange_train = get_vehicle_departure(DTX_ID, "Orange", direction=0, overlap_time=2)
-    print(orange_train)
+    #harvard_train = get_vehicle_departure(HARVARD_ID, "Red", direction=0, overlap_time=concord_opp_fawcett_to_harvard["duration"].seconds/60)
+    #busSL5 = get_vehicle_departure(TMPL_ID, "749", direction=0, overlap_time=20)
+    #orange_train = get_vehicle_departure(DTX_ID, "Orange", direction=0, overlap_time=2)
 
     #print deaprture times and time differences for each separated by new line
-    print(f"\nThe next Red Line Train from Alewife departs at {alewife_train[0]}, in {alewife_train[1]}.")
-    print(f"\nThe next 74 Bus departs from Concord opp Fawcett at {bus74[0]}, in {bus74[1]}.")
-    print(f"\nThe next 78 Bus departs from Concord opp Fawcett at {bus78[0]}, in {bus78[1]}.")
-    print(f"\nThe next Red Line Train from Harvard departs at {harvard_train[0]}, in {harvard_train[1]}.")
-    print(f"\nThe next SL5 Bus departs from Temple Pl. at {busSL5[0]}, in {busSL5[1]}.")
-    print(f"\nThe next Orange Line Train from Downtown Crossing departs at {orange_train[0]}, in {orange_train[1]}.")
+    #print(f"\nThe next Red Line Train from Alewife departs at {alewife_train[0]}, in {alewife_train[1]}.")
+    #print(f"\nThe next 74 Bus departs from Concord opp Fawcett at {bus74[0]}, in {bus74[1]}.")
+    #print(f"\nThe next 78 Bus departs from Concord opp Fawcett at {bus78[0]}, in {bus78[1]}.")
+    #print(f"\nThe next Red Line Train from Harvard departs at {harvard_train[0]}, in {harvard_train[1]}.")
+    #print(f"\nThe next SL5 Bus departs from Temple Pl. at {busSL5[0]}, in {busSL5[1]}.")
+    #print(f"\nThe next Orange Line Train from Downtown Crossing departs at {orange_train[0]}, in {orange_train[1]}.")
 
-# Calculate the total transit time for each route.
-routes = [route_1, route_2, route_3, route_4, route_5, route_6]
-for route in routes:
-    calculate_transit_time(route)
+    # Calculate the total transit time for each route.
+    routes = [route_1, route_2, route_3, route_4, route_5, route_6]
+    for route in routes:
+        calculate_transit_time(route)
+    
+    # Find the route with minimum duration time
+    sorted_route = min(routes, key=lambda x: x["duration"])
+    min_route = sorted_route["duration"]
+    
+    # convert seconds to hours, minutes, seconds
+    print(f"\nFastest Route Duration is {str(min_route)}")
+    
+    # calculate the ETA by adding the duration to the current time
+    eta = datetime.now() + min_route
+    eta = eta.strftime("%I:%M:%S %p")
+    print(f"ETA {eta}")
+    
+    # print the route steps
+    print_route_steps(sorted_route["legs"])
 
-# Find the route with minimum duration time
-sorted_route = min(routes, key=lambda x: x["duration"])
-min_route = sorted_route["duration"]
-
-# convert seconds to hours, minutes, seconds
-print(f"\nFastest Route Duration is {str(min_route)}")
-
-# calculate the ETA by adding the duration to the current time
-eta = datetime.now() + min_route
-eta = eta.strftime("%I:%M:%S %p")
-print(f"ETA {eta}")
-
-# print the route steps
-print_route_steps(sorted_route["legs"])
+    # return 

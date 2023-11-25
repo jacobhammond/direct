@@ -1,61 +1,57 @@
 <!-- FILEPATH: /c:/Users/jhammond/Documents/jhu_embedded_capstone/software/transit.html -->
 
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>Transit Application</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <!-- Logo Image -->
         <div style="display: flex; justify-content: center;">
             <img src="logo.png" alt="Transit Logo" style="margin: 20px; width: 60%; max-width: 5000px;">
         </div>
-<div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-    <!-- Destination Dropdown Menu -->
-    <div style="display: flex; justify-content: flex-start; margin: 15px; font-family: Arial; font-size: 1.25em;">
-        <label for="routes" style="width: 200px;">Destination:</label>
-        <select id="routes" style="font-size: 1em; width: 125px; text-align: left;">
-            <option value="harvard">Harvard</option>
-            <option value="central">Central</option>
-            <option value="inkblock">Ink Block</option>
-        </select>
-    </div>
+            <!-- Destination Dropdown Menu -->
+            <div style="display: flex; justify-content: center; margin: 15px; font-family: Arial; font-size: 1.25em;">
+                <label for="routes" style="width: 200px;">Destination:</label>
+                <select id="routes" style="font-size: 1em; width: 125px; text-align: left;">
+                    <option value="ink">Ink Block</option>
+                    <option value="park">Park St.</option>
+                </select>
+            </div>
 
-    <!-- Notification Volume Dropdown Menu -->
-    <div style="display: flex; justify-content: flex-start; margin: 15px; font-family: Arial; font-size: 1.25em;">
-        <label for="volume" style="width: 200px;">Alarm Volume:</label>
-        <select id="volume" style="font-size: 1em; width: 125px; text-align: left;">
-            <option value="silent">Silent</option>
-            <option value="quiet">Quiet</option>
-            <option value="loud">Loud</option>    
-        </select>
-    </div>
-</div>
-        <!-- Start Button Event Listener -->
-        <div style="display: flex; justify-content: center; margin: 10px;">
-        <button id="start-btn" onclick="fetch_eta(); set_volume();" style="font-size: 2em; padding: 8px 12px;">GO</button>
-        </div>
+            <!-- Notification Volume Dropdown Menu -->
+            <div style="display: flex; justify-content: center; margin: 15px; font-family: Arial; font-size: 1.25em;">
+                <label for="volume" style="width: 200px;">Notifications:</label>
+                <select id="volume" style="font-size: 1em; width: 125px; text-align: left;">
+                    <option value="on">Enabled</option> 
+                    <option value="off">Disabled</option>
+                </select>
+            </div>
 
-        <!-- Real Time Information Box -->
-        <div id="info-box" style="display: flex; flex-direction: column; align-items: center;">
-            <body>
-                <!-- Total Time Display -->
-                <div style="display: flex; justify-content: space-between; font-family: Arial; font-size: 1.5em; margin: 20px">
-                    <div style="text-align: left; padding-right: 51px; font-weight: bold;">Trip Duration:</div>                    
-                    <div id="total-time"></div>
-                </div>
+            <!-- Start Button Event Listener -->
+            <div style="display: flex; justify-content: center; margin: 15px;">
+            <button id="start-btn" onclick="get_route(); set_volume();" style="font-size: 1.75em; padding: 8px 12px;">START</button>
+            </div>
 
-                <!-- ETA Display -->
-                <div style="display: flex; justify-content: space-between; font-family: Arial; font-size: 1.5em;">
-                    <div style="text-align: left; padding-right: 100px; font-weight: bold;">ETA:</div>
-                    <div id="eta"></div>
-                </div>
-                <h3 class="departure-header" style="font-family: Arial; font-size: 2em; margin: 80px">DEPART IN</h3>  
-            </body>            
-        </div>
+            <!-- Trip Duration Display -->
+            <div style="display: flex; justify-content: center; margin: 20px; font-family: Arial; font-size: 1.5em;">
+                <div style="text-align: center;">Depart: <span id="departure"></span></div>                    
+                <div id="itinerary"></div>
+            </div>
+            <div style="display: flex; justify-content: center; margin: 20px; font-family: Arial; font-size: 1.5em;">
+                <div style="text-align: center;">Arrival: <span id="eta"></span></div>                    
+                <div id="itinerary"></div>
+            </div>
+            <!-- Route Legs Display -->
+            <div style="display: flex; justify-content: center; margin: 20px; font-family: Arial; font-size: 1.5em;">
+                <div style="text-align: center;"><span id="routeLegs"></span></div>
+                <div id="route"></div>
+            </div>
 
         <!-- Departure Countdown Timer Display -->
-        <div id="countdown" style="font-size: 10em; text-align: center; margin: 5px; font-family: Arial;"></div>
+        <div id="countdown" style="font-size: 7em; text-align: center; margin: 5px; font-family: Arial;"></div>
         <style>
             @keyframes blink {
                 0% {opacity: 1;}
@@ -66,6 +62,7 @@
                 animation: blink 1s infinite;
             }
         </style>
+
         <script>
             function startCountdown(departureTime) {
                 var countdown = document.getElementById("countdown");
@@ -73,10 +70,11 @@
                 var countdownInterval = setInterval(function() {
                     var now = new Date().getTime();
                     var distance = departureTime - now;
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                     // Display the result in the element with id="countdown"
-                    countdown.innerHTML = minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+                    countdown.innerHTML = hours.toString().padStart(2,'0') + ":" + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
                     // Set color of countdown based on time remaining
                     if(distance < 60000) {
                         countdown.style.color = "red";
@@ -92,42 +90,13 @@
                     // If the countdown is finished, play the alarm sound
                     if (distance < 0) {
                         clearInterval(countdownInterval);
-                        countdown.innerHTML = "00:00";
+                        countdown.innerHTML = "00:00:00";
                         var audio = document.getElementById("alarm");
                         audio.play();
                     }
                 }, 1000);
             }
-
-            function fetch_eta() {
-                var button = document.getElementById("start-btn");
-                if (button.innerHTML === "GO") {
-                    button.innerHTML = "RESET";
-                    // Get selected route from dropdown menu
-                    const selectedRoute = document.getElementById("routes").value;
-                    // Assuming departureTime is the time in milliseconds until departure
-                    //query eta algorithm her for transit time, ETA, and departure time
-                    //<form action="/cgi-bin/eta.py" method="post">
-                    //</form>
-                    //var transitTime = getTransitTime(selectedRoute);
-                    var transitTime = 60000*45;
-                    var transitTimeInMinutes = Math.floor(transitTime / 60000);
-                    var transitTimeInSeconds = Math.floor((transitTime % 60000) / 1000);
-                    var formattedTransitTime = transitTimeInMinutes.toString().padStart(2, '0') + ":" + transitTimeInSeconds.toString().padStart(2, '0');
-                    document.getElementById("total-time").innerHTML += formattedTransitTime;
-                    //var eta = getETA(selectedRoute);
-                    var eta = new Date().getTime() + transitTime;
-                    var formatted_eta = new Date(eta).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});  
-                    document.getElementById("eta").innerHTML += formatted_eta;
-                    //var departureTime = getDepartureTime(selectedRoute);
-                    var departureTime = new Date().getTime() + 360000;
-                    startCountdown(departureTime);
-                } else if (button.innerHTML === "RESET") {
-                    location.reload();
-                }
-            }
         </script>
-
         <!--Set Notification Volume-->
         <audio id="alarm" src="alarm.mp3"></audio>
         <script>
@@ -135,14 +104,77 @@
                 var select = document.getElementById("volume");
                 var audio = document.getElementById("alarm");
                 var selectedVolume = select.options[select.selectedIndex].value;
-                if (selectedVolume === "silent") {
+                if (selectedVolume === "off") {
                     audio.volume = 0.0; // Sets volume to 0%
-                } else if (selectedVolume === "quiet") {
-                    audio.volume = 0.5; // Sets volume to 50%
-                } else if (selectedVolume === "loud") {
+                } else if (selectedVolume === "on") {
                     audio.volume = 1.0; // Sets volume to 100%
                 }
             }
         </script>
+
+        <script>
+            function get_route() {
+                // create XMLHttpRequest object
+                const xhr = new XMLHttpRequest();
+                // set the request URL to point to the python script
+                xhr.open('POST', 'http://localhost:8000/scrape.py', true);
+                // set request handler
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.setRequestHeader('Content-Length', '4'); // Add Content-Length header
+                // send the request
+                xhr.send('test');
+                // handle the response - this is broken for some reason
+                xhr.onload = function() { 
+                    if (xhr.status === 200) {
+                            // load JSON data from server response
+                            const response = JSON.parse(xhr.responseText);
+                        document.getElementById("routeLegs").innerHTML = response.i_legs;
+                        document.getElementById("departure").innerHTML = response.i_start;
+                        document.getElementById("eta").innerHTML = response.i_end;
+                        var departureTime = response.i_departure;
+                        var button = document.getElementById("start-btn");
+                        if (button.innerHTML === "START") {
+                            button.innerHTML = "RESET";
+                            startCountdown(departureTime);
+                        } else if (button.innerHTML === "RESET") {
+                            location.reload();
+                        }
+                    } else {
+                        console.error('Error sending start signal:', xhr.status);
+                        document.getElementById("departure").innerHTML = xhr.status;
+                    }
+                }
+            }
+        </script>
+                <!-- BEGIN: ed8c6549bwf9 -->
+                <!--
+                                // wait until update.json file is created
+                                //fetch('update.json')
+                                //    .then(response => response.json())
+                                //    .then(data => {
+                                //        // Update span for routeLegs and eta for display on page
+                                //        document.getElementById("routeLegs").innerHTML = data.i_legs;
+                                //        document.getElementById("departure").innerHTML = data.i_start;
+                                //        document.getElementById("eta").innerHTML = data.i_end;
+                                //        var departureTime = data.i_departure;
+                                //        //debug print departure time
+                                //        console.log(departureTime);
+                                //        var button = document.getElementById("start-btn");
+                                //        if (button.innerHTML === "START") {
+                                //            button.innerHTML = "RESET";
+                                //            // Get selected route from dropdown menu
+                                //            //const selectedRoute = document.getElementById("routes").value;
+                                //            startCountdown(departureTime);
+                                //        } else if (button.innerHTML === "RESET") {
+                                //            location.reload();
+                                //        }
+                                //    })
+                                //    .catch(error => {
+                                //        console.error('Error:', error);
+                                //    });
+                -->
+                <!-- END: ed8c6549bwf9 -->
+                    
+
     </body>
 </html>
