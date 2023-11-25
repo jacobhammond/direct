@@ -14,10 +14,51 @@
     </div>
     <!-- Destination Dropdown Menu -->
     <div style="display: flex; justify-content: center; margin: 15px; font-family: Arial; font-size: 1.25em;">
-        <label for="routes" style="width: 200px;">Destination:</label>
-        <select id="routes" style="font-size: 1em; width: 125px; text-align: left;">
-            <option value="ink">Ink Block</option>
-            <option value="park">Park St.</option>
+        <label for="routes" style="width: 100px;">Route:</label>
+        <select id="routes" style="font-size: 1em; width: 225px; text-align: left;">
+            <option value="ink" >Home → Ink Block</option>
+            <option value="park">Home → Park St.</option>
+            <option value="trophy">Home → Trophy</option>
+            <option value="central">Home → Central Sq.</option>
+            <option value="work">Ink Block → Work</option>
+        </select>
+    </div>
+
+    <!-- Departure Time Menu -->
+    <!-- load current time by calling get_time() function here -->
+    <div style="display: flex; justify-content: center; margin: 15px; font-family: Arial; font-size: 1.25em;">
+        <label for="departure-hr" style="width: 170px;">Est. Depart Time:</label>
+        <select id="departure-hr" style="font-size: 1em; width: 50px; text-align: left;">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+        </select>
+        <select id="departure-min" style="font-size: 1em; width: 50px; text-align: left;">
+            <option value="0">00</option>
+            <option value="5">05</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+            <option value="55">55</option>
+        </select>
+        <select id="departure-am-pm" style="font-size: 0.75em; width: 50px; text-align: left;">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
         </select>
     </div>
 
@@ -72,9 +113,9 @@
         }
     </style>
 
-
     <!--Javascript Functions-->
     <audio id="alarm" src="alarm.mp3"></audio>
+    
     <script>
         // Set notification volume
         function set_volume() {
@@ -92,20 +133,38 @@
         function button_change() {
             var button = document.getElementById("start-btn");
             if (button.innerHTML === "START") {
-                get_route();
                 set_volume();
+                refresh_loop();
                 button.innerHTML = "RESET";
             } else if (button.innerHTML === "RESET") {
                 location.reload();
                 button.innerHTML = "START";
             }
         }
-
+        var departureTime;
         //get_route JSON fetch
         function get_route() {
+            // Get current time from dropdown menus
+            var departureHr = document.getElementById("departure-hr").value;
+            var departureMin = document.getElementById("departure-min").value;
+            var departureAmPm = document.getElementById("departure-am-pm").value;
+            // convert to string
+            departureHr = departureHr.toString();
+            departureMin = departureMin.toString();        
             // use promise with fetch API to get route and itinerary
-            fetch('http://localhost:8000/scrape.py', {
-                method: 'GET',
+            fetch('http://localhost:8000/direct.py', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': JSON.stringify({
+                        route: document.getElementById("routes").value, 
+                        departure: departureHr + ":" + departureMin + departureAmPm
+                    }).length
+                },
+                body: JSON.stringify({
+                    route: document.getElementById("routes").value,
+                    departure: departureHr + ":" + departureMin +":"+ departureAmPm
+                })
             })
                 .then(response => {
                     if (!response.ok) {
@@ -120,18 +179,24 @@
                     document.getElementById("routeLegs").innerHTML = data.i_legs;
                     document.getElementById("departure").innerHTML = data.i_start;
                     document.getElementById("eta").innerHTML = data.i_end;
-                    var departureTime = data.i_departure;
-                    //debug print departure time
-                    console.log(departureTime);
-                    startCountdown(departureTime);
+                    departureTime = data.i_departure;
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    return error;
                 });
         }
         // Countdown Timer Function
-        function startCountdown(departureTime) {
-            var countdown = document.getElementById("countdown");
+        function startCountdown() {
+            if (countdownInterval){
+                 clearInterval(countdownInterval);
+                 countdownInterval = null;
+                 countdown.classList.remove("blink");
+                 countdown.style.color = "black";
+                 countdown.innerHTML = "00:00:00";
+                 distance = 0;
+            }
+            var countdown = document.getElementById("countdown");    
             // Update the countdown every second
             var countdownInterval = setInterval(function () {
                 var now = new Date().getTime();
@@ -144,7 +209,6 @@
                 // Set color of countdown based on time remaining
                 if (distance < 60000) {
                     countdown.style.color = "red";
-                    countdown.classList.add("blink");
                 } else if (distance < 120000) {
                     countdown.style.color = "orange";
                 } else if (distance < 180000) {
@@ -155,12 +219,50 @@
                 }
                 // If the countdown is finished, play the alarm sound
                 if (distance < 0) {
-                    clearInterval(countdownInterval);
+                    countdownInterval = clearInterval(countdownInterval);
                     countdown.innerHTML = "00:00:00";
                     var audio = document.getElementById("alarm");
                     audio.play();
                 }
             }, 1000);
+        }
+
+        // Get current time and set dropdown menus to current time
+        window.onload = function() {
+            var date = new Date();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+    
+            // Convert minutes to the next multiple of 5
+            minutes = Math.ceil(minutes / 5) * 5;
+            // check if minutes is 60 and increment hours if so
+            if (minutes === 60) {
+                minutes = 0;
+                hours++;
+            } 
+            // Convert hours from 24-hour format to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+
+            // Convert hours and minutes to strings
+            hours = hours.toString();
+            minutes = minutes.toString();
+    
+            // Set the value of the dropdown menus
+            document.getElementById('departure-hr').value = hours;
+            document.getElementById('departure-min').value = minutes;
+            document.getElementById('departure-am-pm').value = ampm;
+        }
+
+        //refresh loop
+        var refreshID;
+        var count;
+        function refresh_loop() {
+            get_route();
+            startCountdown();
+            // refresh every 20 seconds
+            refreshID = setTimeout(refresh_loop, 30000);
         }
     </script>
 </body>
