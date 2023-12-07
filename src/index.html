@@ -156,7 +156,7 @@
             var requested_route = document.getElementById("routes").value;
             var requested_time = encodeURIComponent(departureHr + ":" + departureMin +":"+ departureAmPm)
             //encode into url
-            var url = "https://fetcheta.azurewebsites.net/?route=" + requested_route + "&departure=" + requested_time;
+            var url = "https://fetcheta.azurewebsites.net/api/req?code=PatpgdhpUlNvDJMfhW19tfEo_R5ahZMRheHX6Ck87h5OAzFu-u9Vdw==/?route=" + requested_route + "&departure=" + requested_time;
    
             // jQuery get
             $.get(url, function (data, status) {
