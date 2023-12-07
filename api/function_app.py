@@ -7,21 +7,14 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
-    # Read request headers
-    logging.info(req.headers)
-
-    # parse body of POST
-    body = json.loads(req.get_body())
-
-    # Print body to console
-    logging.info(body)
+    # check if method is GET
+    if req.method == "GET":
+        # get the data from the query string
+        route = req.params.get("route")
+        departure = req.params.get("departure")
 
     # call eta function to get JSON update content to send as response to client
-    response = eta(body["route"], body["departure"])
+    response = eta(route, departure)
 
     # send response to client
-    return func.HttpResponse(
-        bytes(json.dumps(response), "utf-8"),
-        mimetype="application/json",
-        status_code=200
-    )
+    return func.HttpResponse(bytes(json.dumps(response), "utf-8"), status_code=200)
