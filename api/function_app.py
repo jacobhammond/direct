@@ -1,5 +1,4 @@
 import azure.functions as func
-import logging
 from  direct import *
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
@@ -17,4 +16,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     response = eta(route, departure)
 
     # send response to client
-    return func.HttpResponse(bytes(json.dumps(response), "utf-8"), status_code=200)
+    return func.HttpResponse((json.dumps(response), "utf-8"), status_code=200)

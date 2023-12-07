@@ -163,6 +163,8 @@
                 .then(response => response.json())
                 
                 .then(data => {
+                    // parse the JSON response
+                    data = JSON.parse(data);
                     // Update span for routeLegs and eta for display on page
                     document.getElementById("routeLegs").innerHTML = data.i_legs;
                     document.getElementById("departure").innerHTML = data.i_start;
