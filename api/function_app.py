@@ -3,7 +3,6 @@ import logging
 from  direct import *
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
-@app.function(name="fetcheta")
 @app.route(route="req")
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
