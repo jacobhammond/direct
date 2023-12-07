@@ -122,9 +122,18 @@
         //test api fetch
         (async function(){
             const response = await fetch('https://fetcheta.azurewebsites.net/');
-            const { text } = await response.json();
-            console.log('Response:', JSON.stringify(text));
+            console.log('Response:', response);
+            display_response(response)
+
         }());
+
+        // Display response as plain text header
+        function display_response(response) {
+            var header = document.createElement("h1");
+            var text = document.createTextNode(response);
+            header.appendChild(text);
+            document.body.appendChild(header);
+        }
             
 
         // Set notification volume
