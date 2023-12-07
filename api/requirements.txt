@@ -3,3 +3,9 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
+requests
+bs4
+datetime
+json
+http.server
+socketserver
