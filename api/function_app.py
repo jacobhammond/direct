@@ -3,10 +3,10 @@ import logging
 from  direct import *
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
-@app.function(name="http_trigger")
-@app.route(route="http_trigger")
+@app.function(name="fetcheta")
+@app.route(route="req")
 
-def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
+def main(req: func.HttpRequest) -> func.HttpResponse:
 
     # Read request headers
     logging.info(req.headers)
