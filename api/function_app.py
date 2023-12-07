@@ -1,10 +1,10 @@
 import azure.functions as func
 import logging
-from direct import *
+from  direct import *
 
-##app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
-#@app.function(name="http_trigger")
-#@app.route(route="http_trigger")
+app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+@app.function(name="http_trigger")
+@app.route(route="http_trigger")
 
 def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
