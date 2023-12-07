@@ -119,18 +119,11 @@
     
     <script>
 
-        //test api fetch
-        (async function(){
-            const response = await fetch('https://fetcheta.azurewebsites.net/');
-            console.log('Response:', response);
-            const data = await response.json();
-
-        }());
-
         //new robust test fetch
         (async function(){
             fetch('https://fetcheta.azurewebsites.net/', {
-                name: JSON.stringify("Jacob")
+                name: "Jacob",
+                body: "Hammond",
             })
                 .then(response => {
                     if (!response.ok) {
