@@ -1,0 +1,39 @@
+{
+  "routes": [
+    {
+      "route": "/*",
+      "serve": "/index.html",
+      "statusCode": 200
+    }
+  ],
+    "navigationFallback":
+        {
+      "rewrite": "/index.html"
+    },
+
+    "responseOverrides": 
+        {
+        "400": {
+        "redirect": "/login"
+        },
+        "401": {
+          "statusCode": 302,
+          "redirect": "/login"
+        },
+        "403": {
+            "redirect": "/login"
+        },
+        "404": {
+            "redirect": "/login"
+        }
+      },
+
+      "platform" :{
+        "apiRuntime": "python:3.10"
+
+      },
+
+      "trailingSlash": "auto"
+
+    
+  }
