@@ -2,18 +2,17 @@ import azure.functions as func
 import logging
 from direct import *
 
-app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+##app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+#@app.function(name="http_trigger")
+#@app.route(route="http_trigger")
 
-@app.function(name="http_trigger")
-
-@app.route(route="http_trigger", auth_level=func.AuthLevel.FUNCTION)
 def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
     # Read request headers
     logging.info(req.headers)
 
     # parse body of POST
-    body = req.get_json()
+    body = json.loads(req.get_body())
 
     # Print body to console
     logging.info(body)
@@ -23,7 +22,7 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
     # send response to client
     return func.HttpResponse(
-        body=json.dumps(response),
+        bytes(json.dumps(response), "utf-8"),
         mimetype="application/json",
         status_code=200
     )

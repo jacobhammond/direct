@@ -154,7 +154,6 @@
             departureHr = departureHr.toString();
             departureMin = departureMin.toString();        
             // use promise with fetch API to get route and itinerary
-            //fetch('http://localhost:8000/direct.py', {
             fetch('https://fetcheta.azurewebsites.net/', {
                 method: 'POST',
                 headers: {
