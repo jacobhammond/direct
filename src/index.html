@@ -123,9 +123,27 @@
         (async function(){
             const response = await fetch('https://fetcheta.azurewebsites.net/');
             console.log('Response:', response);
-            display_response(response)
+            const data = await response.json();
 
         }());
+
+        //new robust test fetch
+        (async function(){
+            fetch('https://fetcheta.azurewebsites.net/', {
+                name: JSON.stringify("Jacob");
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        console.log(response);
+                        throw new Error('Network response was not ok');
+                    }
+                    display_response(response);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    return error;
+                });
+        })
 
         // Display response as plain text header
         function display_response(response) {
