@@ -119,8 +119,9 @@
     <script>
         //frontend app cal to the direct API backend (python)
         (async function() {
-        const { text } = await( await fetch(`/api/message`)).json();
-        document.querySelector('#name').textContent = text;
+        const { text } = await( await fetch(`/api/function_app`)).json();
+        document.querySelector('Jacob').textContent = text;
+        button.innerHTML = text;
         }());
 
 
