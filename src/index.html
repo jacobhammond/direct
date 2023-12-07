@@ -154,23 +154,14 @@
             departureHr = departureHr.toString();
             departureMin = departureMin.toString();        
             // use promise with fetch API to get route and itinerary
-            fetch('https://fetcheta.azurewebsites.net/', {
+            fetch(`https://fetcheta.azurewebsites.net/?route=${encodeURIComponent(document.getElementById("routes").value)}&departure=${encodeURIComponent(departureHr + ":" + departureMin +":"+ departureAmPm)}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    route: document.getElementById("routes").value,
-                    departure: departureHr + ":" + departureMin +":"+ departureAmPm
-                })
+                }
             })
-                .then(response => {
-                    if (!response.ok) {
-                        console.log(response);
-                        throw new Error('Network response was not ok');
-                    }
-                    //return response.json();
-                })
+                .then(response => response.json())
+                
                 .then(data => {
                     // Update span for routeLegs and eta for display on page
                     document.getElementById("routeLegs").innerHTML = data.i_legs;
