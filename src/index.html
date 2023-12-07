@@ -117,35 +117,7 @@
     <!--Javascript Functions-->
     <audio id="alarm" src="alarm.mp3"></audio>
     
-    <script>
-
-        //new robust test fetch
-        (async function(){
-            fetch('https://fetcheta.azurewebsites.net/', {
-                name: "Jacob",
-                body: "Hammond",
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        console.log(response);
-                        throw new Error('Network response was not ok');
-                    }
-                    display_response(response);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    return error;
-                });
-        })
-
-        // Display response as plain text header
-        function display_response(response) {
-            var header = document.createElement("h1");
-            var text = document.createTextNode(response);
-            header.appendChild(text);
-            document.body.appendChild(header);
-        }
-            
+    <script>           
 
         // Set notification volume
         function set_volume() {
@@ -183,7 +155,7 @@
             departureMin = departureMin.toString();        
             // use promise with fetch API to get route and itinerary
             //fetch('http://localhost:8000/direct.py', {
-            fetch('/api/function_app.py', {
+            fetch('https://fetcheta.azurewebsites.net/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

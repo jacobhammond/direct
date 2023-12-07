@@ -2,13 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 import json
-import http.server
-import socketserver
+#import http.server
+#import socketserver
 
 API_KEY = "67a6b552015743b1b19d9c5131901e3e"
 
 
-def main(destination, depart_time):
+def eta(destination, depart_time):
     # set depart_time hour and minute
     depart_time = depart_time.split(":")
     hour = depart_time[0]
@@ -94,7 +94,7 @@ def main(destination, depart_time):
     # return JSON update
     return update
 
-
+'''
 class RequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         # parse body of POST
@@ -116,3 +116,4 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 with socketserver.TCPServer(("", 8000), RequestHandler) as httpd:
     print("Starting server on port 8000...")
     httpd.serve_forever()
+'''
