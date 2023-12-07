@@ -117,6 +117,13 @@
     <audio id="alarm" src="alarm.mp3"></audio>
     
     <script>
+        //frontend app cal to the direct API backend (python)
+        (async function() {
+        const { text } = await( await fetch(`/api/message`)).json();
+        document.querySelector('#name').textContent = text;
+        }());
+
+
         // Set notification volume
         function set_volume() {
             var select = document.getElementById("volume");
