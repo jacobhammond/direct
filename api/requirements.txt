@@ -5,7 +5,3 @@
 azure-functions
 requests
 bs4
-datetime
-json
-http.server
-socketserver
