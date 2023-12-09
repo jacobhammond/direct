@@ -154,12 +154,12 @@
             var departureAmPm = document.getElementById("departure-am-pm").value;
             var requested_route = document.getElementById("routes").value;
             var requested_time = departureHr + ":" + departureMin +":"+ departureAmPm
-            //concatenate url
+            //concatenate url https://fetcheta.azurewebsites.net/api/req
             var url = " https://fetcheta.azurewebsites.net/api/req?&route=" + requested_route + "&departure=" + requested_time;
             // jQuery get
-            $.get(url, function (response, status_code) {
+            $.get(url, function (data, status) {
                 // Parse JSON data
-                var response = JSON.parse(response);
+                var response = JSON.parse(data);
                 // Set route legs display
                 document.getElementById("routeLegs").innerHTML = response.i_legs;
                 // Set departure time display
@@ -169,7 +169,7 @@
                 // Set departure time for countdown timer
                 departureTime = response.i_departure;
                 // log status
-                console.log("Data: " + data + "\nStatus: " + status_code);            
+                console.log("Data: " + data + "\nStatus: " + status);            
             }
             
             // send POST request
