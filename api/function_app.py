@@ -1,11 +1,12 @@
 import azure.functions as func
+import logging
 from direct import eta
 
 app = func.FunctionApp()
-@app.route(route="req")
+@app.route(route="http_trigger", auth_level=func.AuthLevel.FUNCTION)
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
-
+def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
     # check if method is GET
     if req.method == "GET":
         # get the data from the query string
