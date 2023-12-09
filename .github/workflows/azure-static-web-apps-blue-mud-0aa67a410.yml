@@ -71,7 +71,7 @@ jobs:
           source .venv/bin/activate
 
       - name: Install dependencies
-        run: pip install -r ${{ env.PYTHON_REQUIREMENTS_PATH }}}
+        run: pip install -r /home/runner/work/direct/direct/api/requirements.txt
 
       # Optional: Add step to run tests here
 
