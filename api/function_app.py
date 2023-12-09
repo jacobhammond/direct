@@ -3,9 +3,9 @@ import logging
 from direct import eta
 
 app = func.FunctionApp()
-@app.route(route="http_trigger", auth_level=func.AuthLevel.ANONYMOUS)
+@app.route(route="req", auth_level=func.AuthLevel.ANONYMOUS)
 
-def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
+def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
     # check if method is GET
     if req.method == "GET":
