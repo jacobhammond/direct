@@ -1,5 +1,5 @@
 import azure.functions as func
-from  direct import *
+from direct import eta
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 @app.route(route="req")
@@ -12,8 +12,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         route = req.params.get("route")
         departure = req.params.get("departure")
 
-    # call eta function to get JSON update content to send as response to client
-    response = eta(route, departure)
+        # call eta function to get JSON update content to send as response to client
+        response = eta(route, departure)
 
-    # send response to client
-    return func.HttpResponse((json.dumps(response), "utf-8"), status_code=200)
+        # send response to client
+        return func.HttpResponse(response)

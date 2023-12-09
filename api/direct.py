@@ -92,7 +92,7 @@ def eta(destination, depart_time):
     }
 
     # return JSON update
-    return update
+    return json.dumps(update)
 
 '''
 class RequestHandler(http.server.SimpleHTTPRequestHandler):
