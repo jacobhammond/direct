@@ -155,49 +155,49 @@
             var requested_route = document.getElementById("routes").value;
             var requested_time = departureHr + ":" + departureMin +":"+ departureAmPm
             //concatenate url
-            //var url = " https://fetcheta.azurewebsites.net/api/http_trigger?&route=" + requested_route + "&departure=" + requested_time;
-            var url = "https://fetcheta.azurewebsites.net/api/http_trigger?"
+            var url = " https://fetcheta.azurewebsites.net/api/http_trigger?&route=" + requested_route + "&departure=" + requested_time;
             // jQuery get
-            //$.get(url, function (data, status) {
-            //    // Parse JSON data
-            //    var response = JSON.parse(data);
-            //    // Set route legs display
-            //    document.getElementById("routeLegs").innerHTML = response.i_legs;
-            //    // Set departure time display
-            //    document.getElementById("departure").innerHTML = response.i_start;
-            //    // Set ETA display
-            //    document.getElementById("eta").innerHTML = response.i_end;
-            //    // Set departure time for countdown timer
-            //    departureTime = response.i_departure;
-            //    // log status
-            //    console.log("Data: " + data + "\nStatus: " + status);            
-            //}
+            $.get(url, function (response, status_code) {
+                // Parse JSON data
+                var response = JSON.parse(response);
+                // Set route legs display
+                document.getElementById("routeLegs").innerHTML = response.i_legs;
+                // Set departure time display
+                document.getElementById("departure").innerHTML = response.i_start;
+                // Set ETA display
+                document.getElementById("eta").innerHTML = response.i_end;
+                // Set departure time for countdown timer
+                departureTime = response.i_departure;
+                // log status
+                console.log("Data: " + data + "\nStatus: " + status_code);            
+            }
             
             // send POST request
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: JSON.stringify({route: requested_route, departure: requested_time}),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    // Parse JSON data
-                    var response = JSON.parse(data);
-                    // Set route legs display
-                    document.getElementById("routeLegs").innerHTML = response.i_legs;
-                    // Set departure time display
-                    document.getElementById("departure").innerHTML = response.i_start;
-                    // Set ETA display
-                    document.getElementById("eta").innerHTML = response.i_end;
-                    // Set departure time for countdown timer
-                    departureTime = response.i_departure;
-                    // log status
-                    console.log("Data: " + data + "\nStatus: " + status);
-                },
-                failure: function (errMsg) {
-                    console.log(errMsg);
-                }
-            }
+            //var url = "https://fetcheta.azurewebsites.net/api/http_trigger?"
+            //$.ajax({
+            //    type: "POST",
+            //    url: url,
+            //    data: JSON.stringify({route: requested_route, departure: requested_time}),
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (data) {
+            //        // Parse JSON data
+            //        var response = JSON.parse(data);
+            //        // Set route legs display
+            //        document.getElementById("routeLegs").innerHTML = response.i_legs;
+            //        // Set departure time display
+            //        document.getElementById("departure").innerHTML = response.i_start;
+            //        // Set ETA display
+            //        document.getElementById("eta").innerHTML = response.i_end;
+            //        // Set departure time for countdown timer
+            //        departureTime = response.i_departure;
+            //        // log status
+            //        console.log("Data: " + data + "\nStatus: " + status);
+            //    },
+            //    failure: function (errMsg) {
+            //        console.log(errMsg);
+            //    }
+            //}
             
             );
 
