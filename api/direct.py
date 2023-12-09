@@ -14,14 +14,14 @@ def eta(destination, depart_time):
     AM_PM = depart_time[2]
     # Get the current time
     now = datetime.now()
-    # check if depart time is in the next day (i.e. 12:00 AM - 4:59 AM)
-    if AM_PM == "AM" and int(hour) < 5:
+    # check if depart time is in the next day (i.e. request gave AM, but it is currently PM time)
+    if AM_PM == "AM" and (now.hour > 22):
         # set the date to tomorrow
         now = now.replace(day=now.day + 1)
     # Get the current year, month, day, hour, minute, and AM/PM
-    year = now.strftime("%Y")
-    month = now.strftime("%m")
-    day = now.strftime("%d")
+    year = now.year
+    month = now.month
+    day = now.day
     # Convert minute to integer
     minute = int(minute)
     # Round up to the next 5-minute interval and account for hour change if necessary
