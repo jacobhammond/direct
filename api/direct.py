@@ -2,8 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 import json
-#import http.server
-#import socketserver
 
 API_KEY = "67a6b552015743b1b19d9c5131901e3e"
 
@@ -16,6 +14,10 @@ def eta(destination, depart_time):
     AM_PM = depart_time[2]
     # Get the current time
     now = datetime.now()
+    # check if depart time is in the next day (i.e. 12:00 AM - 4:59 AM)
+    if AM_PM == "AM" and int(hour) < 5:
+        # set the date to tomorrow
+        now = now.replace(day=now.day + 1)
     # Get the current year, month, day, hour, minute, and AM/PM
     year = now.strftime("%Y")
     month = now.strftime("%m")
@@ -93,27 +95,3 @@ def eta(destination, depart_time):
 
     # return JSON update
     return json.dumps(update)
-
-'''
-class RequestHandler(http.server.SimpleHTTPRequestHandler):
-    def do_POST(self):
-        # parse body of POST
-        body = self.rfile.read(int(self.headers["Content-Length"]))
-        body = json.loads(body)
-        # print body to console
-        print(body)
-        # call main function to get JSON update content to send as response to client
-        response = main(body["route"], body["departure"])
-        # send response to client
-        self.send_response(200)
-        self.send_header("Content-type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.end_headers()
-        self.wfile.write(bytes(json.dumps(response), "utf-8"))
-        return
-
-
-with socketserver.TCPServer(("", 8000), RequestHandler) as httpd:
-    print("Starting server on port 8000...")
-    httpd.serve_forever()
-'''

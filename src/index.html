@@ -145,9 +145,10 @@
                 button.innerHTML = "START";
             }
         }
-        var departureTime;
+        
         //get_route JSON fetch
         function get_route() {
+            var departureTime;
             // Get current time from dropdown menus
             var departureHr = document.getElementById("departure-hr").value;
             var departureMin = document.getElementById("departure-min").value;   
@@ -172,6 +173,8 @@
                 // log status
                 console.log("Data: " + data + "\nStatus: " + status);            
             });
+
+            startCountdown(departureTime);
                 
         }
 
@@ -249,7 +252,7 @@
         var count;
         function refresh_loop() {
             get_route();
-            startCountdown();
+            //startCountdown();
             // refresh every 20 seconds
             refreshID = setTimeout(refresh_loop, 30000);
         }
