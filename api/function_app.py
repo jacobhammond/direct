@@ -3,7 +3,7 @@ import logging
 from direct import eta
 
 app = func.FunctionApp()
-@app.route(req="http_trigger", auth_level=func.AuthLevel.ANONYMOUS)
+@app.route(route="http_trigger", auth_level=func.AuthLevel.ANONYMOUS)
 
 def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
@@ -17,4 +17,4 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
         response = eta(route, departure)
 
         # send response to client
-        return func.HttpResponse(response)
+        return func.HttpResponse(response, status_code=200)
