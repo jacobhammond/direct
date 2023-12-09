@@ -19,9 +19,9 @@ def eta(destination, depart_time):
         # set the date to tomorrow
         now = now.replace(day=now.day + 1)
     # Get the current year, month, day, hour, minute, and AM/PM
-    year = now.year
-    month = now.month
-    day = now.day
+    year = now.strftime("%Y")
+    month = now.strftime("%m")
+    day = now.strftime("%d")
     # Convert minute to integer
     minute = int(minute)
     # Round up to the next 5-minute interval and account for hour change if necessary
