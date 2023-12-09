@@ -1,7 +1,7 @@
 import azure.functions as func
 from direct import eta
 
-app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 @app.route(route="req")
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
