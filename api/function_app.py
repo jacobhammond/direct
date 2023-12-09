@@ -18,3 +18,13 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
         # send response to client
         return func.HttpResponse(response, status_code=200)
+    elif req.method == "POST":
+        # get the data from the body
+        route = req.get_json().get("route")
+        departure = req.get_json().get("departure")
+
+        # call eta function to get JSON update content to send as response to client
+        response = eta(route, departure)
+
+        # send response to client
+        return func.HttpResponse(response, status_code=200)
