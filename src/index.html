@@ -145,7 +145,7 @@
                 button.innerHTML = "START";
             }
         }
-        var departureTime = 0;
+        var departureTime;
         //get_route JSON fetch
         function get_route() {
             // Get current time from dropdown menus
@@ -155,7 +155,7 @@
             var requested_route = document.getElementById("routes").value;
             var requested_time = departureHr + ":" + departureMin +":"+ departureAmPm
             //concatenate url
-            var url = "https://fetcheta.azurewebsites.net/api/req?code=0ma9D0xHLAMJYpZjdJ0I0CxJvzUxIFLnFNW85zf4Gt1XAzFuPIMCIw==&route=" + requested_route + "&departure=" + requested_time;
+            var url = "https://fetcheta.azurewebsites.net/api/req?code=ev1plQ9Iw_Y7LJ4X1aA1l6dhZC3u2DI73hgqIPoTbfOkAzFu-sOCsQ==&route=" + requested_route + "&departure=" + requested_time;
    
             // jQuery get
             $.get(url, function (data, status) {
