@@ -155,7 +155,7 @@
             var requested_route = document.getElementById("routes").value;
             var requested_time = departureHr + ":" + departureMin +":"+ departureAmPm
             //concatenate url https://fetcheta.azurewebsites.net/api/http_trigger?code=10mHrGnkSrtz5FADL3o5C9L8L5sZIcy_ghxwvsIRLTCuAzFuAmXU2w==
-            var url = " https://fetcheta.azurewebsites.net/api/http_trigger?code=10mHrGnkSrtz5FADL3o5C9L8L5sZIcy_ghxwvsIRLTCuAzFuAmXU2w==&route=" + requested_route + "&departure=" + requested_time;
+            var url = " https://fetcheta.azurewebsites.net/api/http_trigger?code=trigger&route=" + requested_route + "&departure=" + requested_time;
    
             // jQuery get
             $.get(url, function (data, status) {
