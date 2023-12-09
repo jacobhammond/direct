@@ -150,15 +150,12 @@
         function get_route() {
             // Get current time from dropdown menus
             var departureHr = document.getElementById("departure-hr").value;
-            var departureMin = document.getElementById("departure-min").value;
-            // convert to string
-            departureHr = departureHr.toString();
-            departureMin = departureMin.toString();   
+            var departureMin = document.getElementById("departure-min").value;   
             var departureAmPm = document.getElementById("departure-am-pm").value;
             var requested_route = document.getElementById("routes").value;
-            var requested_time = encodeURIComponent(departureHr + ":" + departureMin +":"+ departureAmPm)
-            //encode into url
-            var url = encodeURIComponent("https://fetcheta.azurewebsites.net/api/req?code=t62K1LV77DjQyncQTlE-AtUjIBXMtABzhMNKs2DBHD_RAzFuu9sxtQ==&route=" + requested_route + "&departure=" + requested_time);
+            var requested_time = departureHr + ":" + departureMin +":"+ departureAmPm
+            //concatenate url
+            var url = "https://fetcheta.azurewebsites.net/api/req?code=0ma9D0xHLAMJYpZjdJ0I0CxJvzUxIFLnFNW85zf4Gt1XAzFuPIMCIw==&route=" + requested_route + "&departure=" + requested_time;
    
             // jQuery get
             $.get(url, function (data, status) {
@@ -171,7 +168,7 @@
                 // Set ETA display
                 document.getElementById("eta").innerHTML = response.i_end;
                 // Set departure time for countdown timer
-                departureTime = data.i_departure;
+                departureTime = response.i_departure;
                 // log status
                 console.log("Data: " + data + "\nStatus: " + status);            
             });
