@@ -75,8 +75,8 @@ def eta(destination, depart_time):
     i_legs = i_legs.replace("\n", "")
 
     # Print the parsed elements
-    print(i_start + " - " + i_end)
-    print(i_legs)
+    #print(i_start + " - " + i_end)
+    #print(i_legs)
 
     # calculate time difference between now and start time in milliseconds
     departure = datetime.strptime(i_start, "%I:%M %p")
