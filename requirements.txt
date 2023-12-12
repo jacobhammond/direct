@@ -1,0 +1,5 @@
+numpy
+JSON
+Requests
+bs4
+azure-functions
