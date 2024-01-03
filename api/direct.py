@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import json
 
-API_KEY = "67a6b552015743b1b19d9c5131901e3e"
+API_KEY = ""
 
 
 def eta(destination, depart_time):
