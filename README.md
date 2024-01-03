@@ -1,5 +1,5 @@
 # DIRECT: Digital Interface for Real-time Estimation of Commute and Transit
-![logo](direct/src/logo.png)
+![logo](src/logo.png)
 
 ## About
 Commuters that use public transit recognize how important it is to accurately estmate travel times. A
@@ -21,10 +21,4 @@ available without the user having to view schedules, or manually refresh a myria
 
 
 
-The DIRECT Application is hosted at the following website:
-&emsp;   
-<p align='center'>
-<a href="https://blue-mud-0aa67a410.4.azurestaticapps.net/">
-    <img src="direct/src/favicon.png"></img>
-</a>   
-</p>
+[Click Here to access the DIRECT application](https://blue-mud-0aa67a410.4.azurestaticapps.net/)
