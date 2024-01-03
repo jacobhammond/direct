@@ -1,4 +1,4 @@
-# DIRECT: Digital Interface for Real-time Estimation of Commute and Transit
+# DIRECT
 ![logo](src/logo.png)
 
 ## About
@@ -12,6 +12,7 @@ arrivals to inch later and later. Many riders atempt to avoid this headache by u
 applications, which atempt to fetch real-time transit data and estimate the most efficient route – but
 these depersonalized tools are also often inaccurate and are usually suited for providing an estimate based
 on historical trips giving users only a best guess of what route they should take.
+
 This project proposes an embedded system that can accurately calculate commute information in real-time
 for a single user that is personalized and programmed to handle real-time calculations of the most used
 routes. The system would provide a level of granularity lacking from other tools by targeting specific routes
